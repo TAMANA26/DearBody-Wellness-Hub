@@ -57,20 +57,20 @@ if selected_main == '🏋️ Fitness Planner':
 
         col1, col2 = st.columns(2)
         with col1:
-    st.subheader("💧 Water Intake Tracker")
-    glasses = st.slider("How many glasses of water did you drink today?", 0, 15, 8)
+            st.subheader("💧 Water Intake Tracker")
+            glasses = st.slider("How many glasses of water did you drink today?", 0, 15, 8)
     
-    # Display current status using a progress bar (replaces the image visually)
-    target_glasses = 8
-    progress_percent = min(100, (glasses / target_glasses) * 100)
-    st.progress(progress_percent / 100)
+            # Display current status using a progress bar (replaces the image visually)
+            target_glasses = 8
+            progress_percent = min(100, (glasses / target_glasses) * 100)
+            st.progress(progress_percent / 100)
     
-    st.markdown(f"**Current Intake:** {glasses} / {target_glasses} glasses")
+           st.markdown(f"**Current Intake:** {glasses} / {target_glasses} glasses")
 
-    if glasses < target_glasses:
-        st.warning(f"💧 Try drinking {target_glasses - glasses} more glasses to meet your goal!")
-    else:
-        st.success("✅ Excellent hydration! Keep it up.")
+       if glasses < target_glasses:
+           st.warning(f"💧 Try drinking {target_glasses - glasses} more glasses to meet your goal!")
+      else:
+          st.success("✅ Excellent hydration! Keep it up.")
 
             st.subheader("🍎 Healthy Food")
             food_done = st.checkbox("Ate Healthy Meals Today?")
