@@ -4,7 +4,7 @@ import time
 import plotly.express as px
 from modules.login import login_page
 from modules.intermittent_fasting import fasting_section
-from modules.junk_to_healthy import junk_section
+from modules.junk_to_healthy import junk_to_healthy_section
 from modules.csv_tracker import csv_section
 
 # Page Config
