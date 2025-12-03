@@ -56,10 +56,10 @@ if selected_main == '🏋️ Fitness Planner':
         st.header("📊 Daily Fitness Tracker")
 
         col1, col2 = st.columns(2)
-       with col1:
-            st.subheader("💧 Water Intake Tracker (3D Glass)")
-            glasses = st.slider("How many glasses of water did you drink today?", 0, 15, 8)
-            water_image_links = {
+     with col1:
+         st.subheader("💧 Water Intake Tracker (3D Glass)")
+         glasses = st.slider("How many glasses of water did you drink today?", 0, 15, 8)
+         water_image_links = {
                 0: "https://i.imgur.com/MvtLltR.png",
                 5: "https://i.imgur.com/TrnTVkF.png",
                 10: "https://i.imgur.com/zs4YHG7.png",
