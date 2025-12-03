@@ -1,0 +1,10 @@
+/* rainbow.css */
+h1, h3, h4 {
+    font-family: 'Comic Sans MS', cursive;
+}
+
+.stSelectbox > div {
+    text-align: center !important;
+    color: black !important;
+    font-size: 18px !important;
+}
