@@ -89,4 +89,4 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-st.caption("This is a simplified planner. You can expand it with Firestore for persistent tracking!")
+st.caption("Healthy Life Healthy Living!")
