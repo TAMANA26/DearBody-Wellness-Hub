@@ -59,12 +59,7 @@ if selected_main == '🏋️ Fitness Planner':
         with col1:
             st.subheader("💧 Water Intake Tracker (3D Glass)")
             glasses = st.slider("How many glasses of water did you drink today?", 0, 15, 8)
-            water_image_links = {
-                0: "https://i.imgur.com/MvtLltR.png",
-                5: "https://i.imgur.com/TrnTVkF.png",
-                10: "https://i.imgur.com/zs4YHG7.png",
-                15: "https://i.imgur.com/Oq1u5FP.gif"
-            }
+            
             if glasses < 5:
                 water_img = water_image_links[0]
             elif glasses < 10:
