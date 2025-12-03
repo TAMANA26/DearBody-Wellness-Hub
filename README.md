@@ -8,7 +8,7 @@ I got tired of jumping between different apps, so I built this hub to manage the
 
 I’ve got the app deployed and running smoothly thanks to Streamlit Cloud. You can see it in action right now:
 
-[**[Link to the Live DearBody App will go here!]**](<YOUR_STREAMLIT_URL>) 
+[**[Link to the Live DearBody App!]**](<PASTE YOUR COPIED STREAMLIT URL HERE>)
 *(Once deployed, replace this placeholder with your live web link!)*
 
 ## 💡 What's Inside This Little Hub?
