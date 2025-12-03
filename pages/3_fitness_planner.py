@@ -1,122 +1,92 @@
-# app.py
 import streamlit as st
-import time
-import plotly.express as px
-from modules.login import login_page
-from modules.intermittent_fasting import fasting_section
-from modules.junk_to_healthy import junk_to_healthy_section
-from modules.csv_tracker import csv_section
+import datetime
 
-# Page Config
+# --- Configuration and Setup ---
 st.set_page_config(layout="wide")
 
-# Rainbow Background
-st.markdown('<style>' + open('styles/rainbow.css').read() + '</style>', unsafe_allow_html=True)
+st.title("🏃 Fitness Planner & Daily Tracker")
+st.markdown("Monitor your daily wellness goals here. Input your progress to see if you met your targets!")
+
+# --- 1. Input Section ---
+st.header("Daily Input")
+
+# Ensure 'glasses' is defined before being used in the comparison logic.
+# We will use st.session_state to make sure the value persists across reruns.
+
+if 'glasses' not in st.session_state:
+    st.session_state['glasses'] = 0
+
+col1, col2 = st.columns(2)
+
+with col1:
+    st.subheader("Hydration & Sleep")
+    # This widget defines and updates the 'glasses' variable in session state
+    st.session_state['glasses'] = st.number_input(
+        "💧 Glasses of Water Consumed (Target: 8+)",
+        min_value=0,
+        max_value=20,
+        value=st.session_state['glasses'],
+        step=1,
+        key='water_input'
+    )
+    sleep_hours = st.slider(
+        "😴 Hours of Sleep (Target: 7+)",
+        min_value=0.0,
+        max_value=12.0,
+        value=8.0,
+        step=0.5,
+        key='sleep_input'
+    )
+
+with col2:
+    st.subheader("Activity")
+    # Define other variables needed for goal tracking
+    exercised = st.checkbox("💪 Completed 30+ minutes of Exercise", value=True)
+    ate_vegetables = st.checkbox("🥗 Ate at least 3 servings of Vegetables", value=True)
+    meditated = st.checkbox("🧘 Completed 10 minutes of Meditation", value=False)
+    
+# Get the defined value from session state for the goal comparison logic
+# The variable 'glasses' is now correctly defined.
+glasses = st.session_state['glasses']
+
+
+# --- 2. Goal Tracking Logic (This is where the original error occurred) ---
+st.header("Goal Progress")
+st.subheader(f"Tracker for {datetime.date.today().strftime('%A, %B %d, %Y')}")
+
+# A list of tuples: (Goal Description, Goal Met Condition)
+daily_goals = [
+    # FIX: 'glasses' is now defined above via st.session_state
+    ("💧 Water", glasses >= 8), 
+    ("😴 Sleep", sleep_hours >= 7),
+    ("💪 Exercise", exercised),
+    ("🥗 Nutrition", ate_vegetables),
+    ("🧘 Mindfulness", meditated)
+]
+
+# --- 3. Display Results ---
+total_goals = len(daily_goals)
+goals_met = sum(1 for _, met in daily_goals if met)
+progress_percentage = (goals_met / total_goals) * 100 if total_goals > 0 else 0
+
+st.metric(label="Total Goals Met", value=f"{goals_met} / {total_goals}", delta=f"{progress_percentage:.0f}% Progress")
+
+st.markdown("---")
+
+for description, met in daily_goals:
+    if met:
+        st.success(f"✅ {description}: Goal Met!")
+    else:
+        st.warning(f"❌ {description}: Needs Improvement.")
+
+
+# --- Additional Suggestions ---
 st.markdown("""
-    <style>
-    .stApp {
-        background: linear-gradient(135deg, 
-            #fcb1d1, #f8c3ec, #d6c1ff, #c1d8ff, #b5f3e0, #fff1a8, #ffcda9);
-        background-size: 140% 140%;
-        animation: gradientMove 20s ease infinite;
+<style>
+    .stNumberInput, .stSlider {
+        margin-bottom: 20px;
     }
-    @keyframes gradientMove {
-        0% {background-position: 0% 50%;}
-        50% {background-position: 100% 50%;}
-        100% {background-position: 0% 50%;}
-    }
-    </style>
+</style>
 """, unsafe_allow_html=True)
 
-# Login Section
-if "logged_in" not in st.session_state:
-    st.session_state.logged_in = False
-
-if not st.session_state.logged_in:
-    login_page()
-    st.stop()
-
-# Page Title
-st.markdown("""
-    <h1 style='text-align: center; color: white;'>🍎 DearBody</h1>
-    <h3 style='text-align: center; color: white;'>✨ One Page to Track Your Fitness, Food & Fasting Goals ✨</h3>
-""", unsafe_allow_html=True)
-
-# Main Section Navigation
-selected_main = st.selectbox("⬇️ Choose a Section to View", [
-    '🏋️ Fitness Planner', '🕐 Intermittent Fasting', '🍟 Junk to Healthy', '📊 CSV Tracker'],
-    index=0)
-
-# Sub-section for Fitness Planner
-if selected_main == '🏋️ Fitness Planner':
-    st.markdown("""<h2 style='color:#fff;text-align:center;'>Choose a Fitness Tool</h2>""", unsafe_allow_html=True)
-    selected_fitness = st.radio("", ["Fitness Tracker", "Fitness Access"], horizontal=True)
-
-    if selected_fitness == "Fitness Tracker":
-        st.header("📊 Daily Fitness Tracker")
-
-        col1, col2 = st.columns(2)
-        with col1:
-            st.subheader("🍎 Healthy Food")
-            food_done = st.checkbox("Ate Healthy Meals Today?")
-            if not food_done:
-                st.info("Try including fruits and veggies 🥗")
-
-            st.subheader("🏋️ Exercise")
-            exercise_done = st.checkbox("Completed Exercise?")
-            if not exercise_done:
-                st.info("Even a 10-min walk helps! 🚶‍♀️")
-
-            st.subheader("😴 Sleep Tracker")
-            sleep = st.slider("How many hours did you sleep?", 0, 12, 7)
-            sleep_done = sleep >= 7
-            if not sleep_done:
-                st.warning(f"You need around {7 - sleep} more hours of sleep 😴")
-
-            st.subheader("😀 Mood")
-            mood = st.radio("How do you feel today?", ["😀", "😐", "😫", "😴", "🤒"], horizontal=True)
-
-        with col2:
-            st.subheader("🧠 Motivation")
-            quotes = [
-                "Push through the pain, it’s worth it 💥",
-                "Every drop of sweat counts 💦",
-                "Show up, even when it's hard 🙌",
-                "Fuel your fire 🔥",
-                "You’re stronger than your excuses 💪"
-            ]
-            st.success(st.selectbox("Today's Motivation", quotes))
-
-            st.subheader("🎧 Relaxing Music")
-            st.audio("https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3")
-
-            st.subheader("🎯 Health Emoji Tracker")
-            goals = [
-                ("💧 Water", glasses >= 8),
-                ("🍎 Food", food_done),
-                ("🏋️ Exercise", exercise_done),
-                ("😴 Sleep", sleep_done),
-                ("😀 Mood", mood == "😀")
-            ]
-            achieved = sum([1 for _, done in goals if done])
-
-            for emoji, done in goals:
-                st.markdown(f"{emoji} {'✅' if done else '❌'}")
-
-            if achieved == 5:
-                st.balloons()
-                st.success("🎉 All 5 Daily Health Goals Achieved! You're unstoppable!")
-            else:
-                st.info(f"⭐ You completed {achieved}/5 goals. Let's hit 5 tomorrow!")
-
-            if achieved <= 3:
-                st.error("💡 Tip: Try setting small hourly reminders for water, food, or breaks!")
-
-        st.markdown("---")
-        st.subheader("📆 Weekly Planner (Sample Chart)")
-        week_data = {
-            "Day": ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
-            "Calories Burned": [220, 180, 260, 300, 190, 150, 200]
-        }
-        fig = px.line(week_data, x="Day", y="Calories Burned", markers=True, title="Calories Burned Over the Week")
-        st.plotly_chart(fig)
+st.caption("This is a simplified planner. You can expand it with Firestore for persistent tracking!")
