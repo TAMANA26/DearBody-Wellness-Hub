@@ -557,3 +557,4 @@ elif selected == '🍟 Junk to Healthy':
 
 # Motivation Footer
 st.markdown("<h4 style='text-align: center; color: white;'>DearBody by Tamana: Where wellness meets self-love, one healthy habit at a time. 💖</h4>", unsafe_allow_html=True)
+ 
